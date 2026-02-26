@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Bauchspeicheldrüsenkrebs - Tage zählen</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f3f3f3;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      margin-top: 80px;
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      text-align: center;
+      max-width: 480px;
+    }
+    .count {
+      font-size: 2.5em;
+      margin: 20px 0;
+      color: #5c759d;
+    }
+    .label {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 8px;
+      color: #3e5777;
+    }
+    .small-note {
+      font-size: 0.9em;
+      color: #666;
+      margin-top: 16px;
+    }
+    input[type="date"] {
+      padding: 8px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-top: 12px;
+    }
+    .prognose {
+      margin-top: 16px;
+      color: #e06e6e;
+      font-size: 1.05em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Für meine Freundin ❤️</h1>
+    <div>
+      <div class="label">Diagnosedatum</div>
+      <input type="date" id="diagnose" />
+    </div>
+    <div class="prognose">
+      Prognose: Durchschnittlich etwa <b>3 bis 6 Monate</b> (ca. <span id="prognoseTag">90</span> Tage)
+    </div>
+    <div class="label" style="margin-top:20px;">Tage seit Diagnose (Count Up)</div>
+    <div class="count" id="countUp">-</div>
+    <div class="label">Geschätzte verbleibende Tage (Count Down)</div>
+    <div class="count" id="countDown">-</div>
+    <div class="small-note">
+      <em>Die Zahl beruht auf medizinischen Durchschnittswerten - die wahre Zeit kann länger oder kürzer sein.<br>
+      Jeder Tag ist wertvoll. ❤️</em>
+    </div>
+  </div>
+  <script>
+    const diagnoseInput = document.getElementById('diagnose');
+    const countUpElem = document.getElementById('countUp');
+    const countDownElem = document.getElementById('countDown');
+    const prognoseTagElem = document.getElementById('prognoseTag');
+    // Prognose in Tagen (beispielhaft 90 Tage für 3 Monate)
+    let prognoseTage = 90;
+
+    diagnoseInput.addEventListener('input', function() {
+      if(this.value) {
+        const diagnoseDatum = new Date(this.value);
+        const heute = new Date();
+        // Setze Uhrzeit auf 0 Uhr, damit es Tagesgenau wird
+        diagnoseDatum.setHours(0,0,0,0);
+        heute.setHours(0,0,0,0);
+        const vergangeneTage = Math.floor((heute - diagnoseDatum) / (1000*60*60*24));
+        countUpElem.textContent = vergangeneTage > 0 ? vergangeneTage : 0;
+        const verbleibend = prognoseTage - vergangeneTage;
+        countDownElem.textContent = verbleibend > 0 ? verbleibend : 0;
+      }
+    });
+
+    // Optional: Prognose-Tage anpassbar machen
+    prognoseTagElem.textContent = prognoseTage;
+  </script>
+</body>
+</html>
